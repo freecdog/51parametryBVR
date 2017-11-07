@@ -76,7 +76,8 @@
             parameters.Kzzhsh = calcKzzhsh(parameters.Kzzh);          // коэффициент, учитывающий условия отбойки в зажиме
             parameters.Ks = calcKs(parameters.E);              // коэффициент, учитывающий количество параллельно-сближенных скважин
 
-            parameters.Ko = calcKo(parameters.Kbsh, parameters.Kzzhsh, parameters.Ks);  // коэффициент отбойки, комплексно характеризующий условия отбойки
+            //parameters.Ko = calcKo(parameters.Kbsh, parameters.Kzzhsh, parameters.Ks);  // коэффициент отбойки, комплексно характеризующий условия отбойки
+            parameters.Ko = calcKo();  // коэффициент отбойки, комплексно характеризующий условия отбойки
 
 
             parameters.Co = calcCo(parameters.Ko, parameters.f);                    // показатель взрываемости в общем случае
@@ -131,8 +132,10 @@
         function calcKs(E){
             return Math.sqrt(E);
         }
-        function calcKo(Kbsh, Kzzhsh, Ks){
-            return Kbsh * Kzzhsh * Ks;
+        //function calcKo(Kbsh, Kzzhsh, Ks){
+        function calcKo(){
+            //return Kbsh * Kzzhsh * Ks;
+            return 1;
         }
         function calcCo(Ko, f){
             return Ko * (20 + 56 * Math.exp(-0.2 * f));
@@ -212,9 +215,8 @@
         // PUBLIC
 
         this.init = function(){
+
             console.log("BVRModel initialized");
-
-
         };
 
         this.applyUserParameters = applyUserParameters;
@@ -251,8 +253,8 @@
                 dk: 0.4,        // alphak, диаметр кондиционного куска
                 gamma: 3.5,     // объемный вес руды в массиве, т/м3
 
-                roVV: 1,
-                roA: 1,
+                roVV: 1200,     // плотность заряжения глубоких скважин, кг/м3
+                roA: 1050,      // плотность заряжения аммонита №6 ЖВ, кг/м3
 
                 Kn: 0.85,
                 Kzzh: 1,
@@ -261,14 +263,44 @@
                 K: 1,
                 nu: 0.33,
                 U: 8.5      // кг/м
+
+                //dz: 105,                  // диаметр заряда, мм
+                //PVV: 320,                 // работоспособность применяемого ВВ, см3
+                //PA: 360,                  // работоспособность аммонита №6 ЖВ, см3
+                //
+                //Kzzh: 1,                // F(B, deltah), коэффициент зажима
+                //Vs: 34,                  // толщина отбиваемого слоя, м
             };
+
+            convertUserParameters(userParameters,
+                [
+                    ["B", "Vs"]
+                ]
+            );
 
             bvrModel.init();
             bvrModel.applyUserParameters(userParameters);
             bvrModel.runCalculationControl();
 
-            //console.log('init successfully');
+            console.log('init jCalcBVRMainController() successfully');
         }
+
+        function convertUserParameters(obj, arrFromTo){
+            for (var i = 0; i < arrFromTo.length; i++){
+                renameProperty(obj, arrFromTo[i][0], arrFromTo[i][1]);
+            }
+        }
+        function renameProperty(o, old_key, new_key){
+            if (old_key == new_key) {
+                return o;
+            }
+            if (o.hasOwnProperty(old_key)) {
+                o[new_key] = o[old_key];
+                delete o[old_key];
+            }
+            return o;
+        }
+
 
     }]);
 
