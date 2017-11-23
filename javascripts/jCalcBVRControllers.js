@@ -23,42 +23,44 @@
 
         // default values
         var parameters = {
+            A: 30,                  // размеры (длина), м
+            alphaz: 0.1,            // диаметр глубоких скважин, м
+            Asch: 5,                // == Bk, м
+            B: 34,                  // размеры (ширина), м
+            dk: 0.4,                // диаметр кондиционного куска, м [0.2, 0.4]
             dz: 0,                  // диаметр заряда
-            roVV: 0,                // плотность заряжения глубоких скважин
+            E: 1,                   // количество параллельно-сближенных скважин
+            f: 7.5,                 // коэффициент крепости обрушаемых горных пород
+            gamma: 3500,            // объемный вес руды в массиве, кг/м3
+            H: 700,                 // глубина разработки, м
+            h: 34,                  // размеры (высота), м
+            //hps:
+            K: 1,                   // коэффициент неоднородности массива K = [0.85, 1]
+            Kn: 0.85,               // коэффициент недозаряда глубоких скважин [0.7,0.95]
+            Kzzh: 0,                // F(B, deltah), коэффициент зажима
+            nu: 0.33,               // коэффициент Пуассона
+            PA: 0,                  // работоспособность аммонита №6 ЖВ
             PVV: 0,                 // работоспособность применяемого ВВ
             roA: 0,                 // плотность заряжения аммонита №6 ЖВ
-            PA: 0,                  // работоспособность аммонита №6 ЖВ
+            roVV: 0,                // плотность заряжения глубоких скважин
+            //qf: 0,                  // удельный расход ВВ на отбойку, в зависимости только от f
+            //S: 0,                   // площадь рудного массива в плоскости веера скважин, м2
 
-            E: 1,                   // количество параллельно-сближенных скважин
-
-            Kzzh: 0,                // F(B, deltah), коэффициент зажима
-
-            vertical: false,        // тип пространства
-
-            Vs: 0,                  // толщина отбиваемого слоя
-            Vo: 0,                  // меньший горизонтальный размер в плоскости обнажения
-            Wf: 0,                  // ЛНС на отбойку, в зависимости только от f
-            qf: 0,                  // удельный расход ВВ на отбойку, в зависимости только от f
-            S: 0,                   // площадь рудного массива в плоскости веера скважин, м2
-            H: 700,                 // глубина разработки, м
-
-            K: 1,                   // коэффициент неоднородности массива K = [0.85, 1]
-            Krb: 2,                 // коэффициент, учитывающий способ разбуривания массива. Krb = 1 при разбуривании массива параллельными скважинами, Krb = 2 - веерами скважин
-            Kn: 0.85,               // коэффициент недозаряда глубоких скважин
-            U: 0,                   // масса ВВ на 1м скважины, кг
-
-            f: 7.5,                 // коэффициент крепости обрушаемых горных пород
-
+            sposobOtboiki: 2,                   // 0 - вертикальный, 1 - на горизонт, 2 - в зажиме
+            sposobRaspolozheniyaVeerov: 0,      // 0 - вертикальный, 1 - горизонтальный
+            sposobRazburivaniya: 0,             // 0 - веерный, 1 - параллельный
             sposobVzryvaniyaIndex: 0,
-            sposobVzryvaniya: [     // способ коротко-замедленного взрывания
+            sposobVzryvaniya: [                 // способ коротко-замедленного взрывания
                 { n: 6.105,     b: -0.629,      c: -0.53},          // одиночное
                 { n: 4.74,      b: -12.975,     c: 4.253},          // многорядное
                 { n: 134.321,   b: -7.356,      c: 1.192}           // порядное
             ],
 
-            dk: 0.4,                  // диаметр кондиционного куска, м
-
-            nu: 0.33                // коэффициент Пуассона
+            U: 0,                   // масса ВВ на 1м скважины, кг
+            vertical: true,         // тип пространства
+            Vo: 0,                  // меньший горизонтальный размер в плоскости обнажения
+            Vs: 0,                  // толщина отбиваемого слоя
+            Wf: 0                   // ЛНС на отбойку, в зависимости только от f
         };
 
         // PRIVATE
@@ -68,17 +70,15 @@
             parameters.KA = calcKA(parameters.PVV, parameters.PA);                      // относительная работоспособность взрывчатого вещества
             parameters.dpr = calcdpr(parameters.dz, parameters.KA, parameters.roo);     // приведенный диаметр заряда
 
-
             parameters.Kk = calcKk(parameters.vertical, parameters.nu);
 
-
-            parameters.Kbsh = calcKbsh(parameters.Vo, parameters.Wf, parameters.Kk, parameters.S, parameters.H, parameters.f, parameters.qf); // коэффициент, учитывающий напряженное состояние массива
-            parameters.Kzzhsh = calcKzzhsh(parameters.Kzzh);          // коэффициент, учитывающий условия отбойки в зажиме
-            parameters.Ks = calcKs(parameters.E);              // коэффициент, учитывающий количество параллельно-сближенных скважин
+            // TODO Ko принято за 1
+            //parameters.Kbsh = calcKbsh(parameters.Vo, parameters.Wf, parameters.Kk, parameters.S, parameters.H, parameters.f, parameters.qf); // коэффициент, учитывающий напряженное состояние массива
+            //parameters.Kzzhsh = calcKzzhsh(parameters.Kzzh);          // коэффициент, учитывающий условия отбойки в зажиме
+            //parameters.Ks = calcKs(parameters.E);              // коэффициент, учитывающий количество параллельно-сближенных скважин
 
             //parameters.Ko = calcKo(parameters.Kbsh, parameters.Kzzhsh, parameters.Ks);  // коэффициент отбойки, комплексно характеризующий условия отбойки
             parameters.Ko = calcKo();  // коэффициент отбойки, комплексно характеризующий условия отбойки
-
 
             parameters.Co = calcCo(parameters.Ko, parameters.f);                    // показатель взрываемости в общем случае
 
@@ -89,9 +89,11 @@
             parameters.m = calcm(parameters.Co);                        // коэффициент сближения скважинных зарядов
             parameters.a = calca(parameters.m, parameters.W);           // расстояние между зарядами ВВ в торце скважин веера, м
 
+            parameters.Krb = parameters.sposobRazburivaniya == 0 ? 2 : 1; // коэффициент, учитывающий способ разбуривания массива. Krb = 1 при разбуривании массива параллельными скважинами, Krb = 2 - веерами скважин
             parameters.lyambda = calclyambda(parameters.a, parameters.W, parameters.gamma, parameters.Krb);     // выход руды с 1м глубокой скважины
 
-
+            // порядок значений U: 8.5,         // кг/м
+            parameters.U = calcU(parameters.dz, parameters.roVV);
             parameters.q = calcq(parameters.Kn, parameters.U, parameters.lyambda);          // удельный расход на отбойку, кг/т
 
             parameters.R = calcR(parameters.W, parameters.K);          // длина образующей воронки выброса, м
@@ -100,11 +102,26 @@
             var sposobVzryvaniya = parameters.sposobVzryvaniya[parameters.sposobVzryvaniyaIndex];
             parameters.dsr0 = calcdsr0(parameters.r, sposobVzryvaniya.n, sposobVzryvaniya.b, sposobVzryvaniya.c);       // относительный диаметр среднего куска отбитой руды
 
-            parameters.dsr = calcdsr(parameters.r);                    // диаметр среднего куска дробленной руды, м
+            parameters.dsr = calcdsr(parameters.dsr0, parameters.dpr);                    // диаметр среднего куска дробленной руды, м
 
-            parameters.alpha = calcalpha(parameters.dk);                // коэффициент зависящий от dk
             parameters.betta = calcbetta(parameters.dk);                // коэффициент зависящий от dk
+            parameters.alpha = calcalpha(parameters.dk);                // коэффициент зависящий от dk
 
+            parameters.BN = calcBN(parameters.dk, parameters.dsr, parameters.alpha, parameters.betta);
+
+            parameters.Bk = parameters.Asch;
+            parameters.BB = calcBB(parameters.sposobOtboiki, parameters.A, parameters.B, parameters.h, parameters.Bk, parameters.gamma);
+
+            parameters.Q = calcQ(parameters.BB, parameters.q);
+
+            parameters.Lsigma = calcLsigma(parameters.Q, parameters.Kn, parameters.U);
+
+            parameters.Zv = calcZv(parameters.sposobRaspolozheniyaVeerov, parameters.A, parameters.Bk, parameters.W);
+            parameters.Zv = Math.round(parameters.Zv + 0.6);
+
+            parameters.Lv = calcLv(parameters.Lsigma, parameters.Zv);
+
+            console.log(parameters);
         }
 
         function calcKA(PVV, PA){
@@ -177,7 +194,6 @@
             return dsr0 * dpr;
         }
 
-
         function calcalpha(dk){
             return 9.11 * dk * Math.exp(-11.1 * dk)
         }
@@ -188,6 +204,50 @@
             return 100 * ( 1 - Math.exp(-alpha * Math.pow(dsr/dk - 0.2 + Math.abs(dsr/dk-0.2), betta) ) );
         }
 
+        function calcU(dz, roVV){
+            return Math.PI * dz * dz / 4 * roVV;
+        }
+
+        function calcBN(dk, dsr, alpha, betta){
+            var a = Math.pow(dsr / dk - 0.2 + (dsr/dk -0.2), betta);
+            var b = Math.exp( (-alpha) * a);
+            return 100 * ( 1 - b );
+        }
+
+        function calcBB(sposobOtboiki, A, B, h, Bk, gamma){   // отбойка на вертик. компенсационную щель
+
+            if (sposobOtboiki == 0){
+                return A * (B - Bk) * h * gamma;
+            } else if (sposobOtboiki == 1){
+                console.error("there is no hps");
+                return 0;
+                //return A * B * (h - hps) * gamma;
+            } else if (sposobOtboiki == 2){
+                return A * B * h * gamma;
+            }
+        }
+
+        function calcQ(B, q){
+            return B * q;
+        }
+
+        function calcLsigma(Q, Kn, U){
+            return Q / (Kn * U);
+        }
+
+        function calcZv(sposobRaspolozheniyaVeerov, A, Bk, W){
+            if (sposobRaspolozheniyaVeerov == 0){
+                return (A - Bk) / W;
+            } else {
+                console.error("no hps");
+                return 0;
+                //return (h - hps) / W;
+            }
+        }
+
+        function calcLv(Lsigma, Zv){
+            return Lsigma / Zv;
+        }
 
         function applyUserParameters(userData){
             if (userData !== undefined && userData !== null){
@@ -205,7 +265,6 @@
 
             parameters.Kk = calcKk(parameters.vertical, parameters.nu);
 
-
             var sposobVzryvaniya = parameters.sposobVzryvaniya[parameters.sposobVzryvaniyaIndex];
             parameters.dsr0 = calcdsr0(parameters.r, sposobVzryvaniya.n, sposobVzryvaniya.b, sposobVzryvaniya.c);       // относительный диаметр среднего куска отбитой руды
 
@@ -215,7 +274,6 @@
         // PUBLIC
 
         this.init = function(){
-
             console.log("BVRModel initialized");
         };
 
@@ -234,55 +292,53 @@
         function init(){
 
             var userParameters = {
-                vertical: true,
-                Krb: 2,             // так как веерами
-                sposobVzryvaniyaIndex: 2,       // порядное взрывание
-                f: 7.5,
-                A: 30,      // ?
-                B: 34,      // ?
-                h: 34,      // ?
-                Asch: 5,    // ?
-                H: 700,
-
-                VVname: "граммонит 79/21",  // теплота взрыва, 1030 ккал/кг; скорость детонации, 3.3 км/с; работоспособность, 360 10^-6 м; плотность заряжения, 1.05 г/см3
-                PVV: 3.6*1e-4,              // AVV
-                PA: 3.6*1e-4,               // Ae
-
-
-                alphaz: 0.1,    // диаметр глубоких скважин
+                A: 30,          // размеры (длина), м
+                alphaz: 0.1,    // диаметр глубоких скважин, м
+                Asch: 5,        // == Bk м
+                B: 34,          // размеры (ширина), м
                 dk: 0.4,        // alphak, диаметр кондиционного куска
-                gamma: 3.5,     // объемный вес руды в массиве, т/м3
+                dz: 0.1,        // диаметр заряда, м
+                E: 1,           // количество параллельно-сближенных скважин
+                f: 8,           // коэффициент крепости обрушаемых горных пород
+                gamma: 3.5,     // объемный вес руды в массиве, тонн/м3
+                H: 700,         // глубина разработки, м
+                h: 34,          // размеры (высота), м
+                //hps:
+                K: 1,           // коэф. неоднородности массива, 0.85-1
+                Kn: 0.75,       // коэф. недозаряда [0.7, 0.95]
+                Kzzh: 1,        // F(B, deltah), коэффициент зажима
+                nu: 0.33,       // коэффициент Пуассона
+                PA: 3.6*1e-4,   // Ae, работоспособность аммонита, см3
+                PVV: 3.6*1e-4,  // AVV, работоспособность применяемого ВВ, см3
+                roA: 1000,      // плотность заряжения аммонита №6 ЖВ, кг/м3
+                roVV: 1000,     // плотность заряжения глубоких скважин, кг/м3
+                sposobOtboiki: 2,               // в зажиме
+                sposobRaspolozheniyaVeerov: 0,  // вертикальный
+                sposobRazburivaniya: 0,         // веерный
+                sposobVzryvaniyaIndex: 2,       // порядное взрывание
+                vertical: true,
+                VVname: "граммонит 79/21"       // теплота взрыва, 1030 ккал/кг; скорость детонации, 3.3 км/с; работоспособность, 360 10^-6 м; плотность заряжения, 1.05 г/см3
 
-                roVV: 1200,     // плотность заряжения глубоких скважин, кг/м3
-                roA: 1050,      // плотность заряжения аммонита №6 ЖВ, кг/м3
-
-                Kn: 0.85,
-                Kzzh: 1,
-
-                E: 1,
-                K: 1,
-                nu: 0.33,
-                U: 8.5      // кг/м
-
-                //dz: 105,                  // диаметр заряда, мм
-                //PVV: 320,                 // работоспособность применяемого ВВ, см3
-                //PA: 360,                  // работоспособность аммонита №6 ЖВ, см3
-                //
-                //Kzzh: 1,                // F(B, deltah), коэффициент зажима
-                //Vs: 34,                  // толщина отбиваемого слоя, м
+                //PVV: 320,                     // работоспособность применяемого ВВ, см3
+                //PA: 360,                      // работоспособность аммонита №6 ЖВ, см3
+                //Kzzh: 1,                      // F(B, deltah), коэффициент зажима
+                //Vs: 34,                       // толщина отбиваемого слоя, м
             };
 
-            convertUserParameters(userParameters,
-                [
-                    ["B", "Vs"]
-                ]
-            );
+            //convertUserParameters(userParameters,
+            //    [
+            //        ["B", "Vs"]
+            //    ]
+            //);
 
             bvrModel.init();
             bvrModel.applyUserParameters(userParameters);
-            bvrModel.runCalculationControl();
+            //bvrModel.runCalculationControl();
+            bvrModel.runCalculation();
 
             console.log('init jCalcBVRMainController() successfully');
+
+            $scope.parameters = userParameters;
         }
 
         function convertUserParameters(obj, arrFromTo){
@@ -300,6 +356,14 @@
             }
             return o;
         }
+
+        function Calculate(){
+            bvrModel.applyUserParameters($scope.parameters);
+            bvrModel.runCalculation();
+        }
+
+        // public
+        this.Calculate = Calculate;
 
 
     }]);
