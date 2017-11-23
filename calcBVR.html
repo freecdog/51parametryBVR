@@ -24,12 +24,191 @@
 
         <div class="container">
             <div class="page-header">
-                <h1>БВР</h1>
+                <h1>Определение параметров буровзрывных работ</h1>
             </div>
         </div>
 
         <div class="container">
-            <h3>Text</h3>
+            <div class="row">
+                <div class="col-xs-6">
+
+                    <div class="row">
+                        <fieldset>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>Крепость руды</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.f" type="number" class="form-control input" min="0" placeholder="коэффициент крепости обрушаемых горных пород">
+                                        <span class="input-group-addon input">баллов</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>Длина</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.A" type="number" class="form-control input" min="0" placeholder="длина">
+                                        <span class="input-group-addon input">м</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>Ширина</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.B" type="number" class="form-control input" min="0" placeholder="ширина">
+                                        <span class="input-group-addon input">м</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>Высота</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.h" type="number" class="form-control input" min="0" placeholder="высота">
+                                        <span class="input-group-addon input">м</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>Ширина щели</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.Asch" type="number" class="form-control input" min="0" placeholder="ширина вертикальной отрезной щели">
+                                        <span class="input-group-addon input">м</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>H</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.H" type="number" class="form-control input" min="0" placeholder="Глубина разработки">
+                                        <span class="input-group-addon input">м</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>γ</h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.gamma" type="number" class="form-control input" min="0" placeholder="объемный вес руды в массиве">
+                                        <span class="input-group-addon input">кг/м<sup>3</sup></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>ρ<sub>ВВ</sub></h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.roVV" type="number" class="form-control input" min="0" placeholder="плотность заряжения глубоких скважин">
+                                        <span class="input-group-addon input">кг/м<sup>3</sup></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>ρ<sub>A</sub></h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.roA" type="number" class="form-control input" min="0" placeholder="плотность заряжения аммонита №6 ЖВ">
+                                        <span class="input-group-addon input">кг/м<sup>3</sup></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>P<sub>ВВ</sub></h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.PVV" type="number" class="form-control input" min="0" placeholder="работоспособность применяемого ВВ">
+                                        <span class="input-group-addon input">см<sup>3</sup></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-xs-4 control-label">
+                                    <h4>P<sub>A</sub></h4>
+                                </label>
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <input ng-model="parameters.PA" type="number" class="form-control input" min="0" placeholder="работоспособность аммонита">
+                                        <span class="input-group-addon input">см<sup>3</sup></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <a class="btn btn-primary btn col-xs-6" ng-click="Calculate()">
+                    <span>Произвести расчёт</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="container" ng-show="answer.W">
+            <div class="row">
+                <div class="page-header">
+                    <h1>Результаты:</h1>
+                </div>
+                <div class="col-xs-6">
+                    <blockquote>
+                        <span>W: {{answer.W | number}} м</span>
+                        <br>
+                        <span>C<sub>o</sub>: {{answer.Co | number}}</span>
+                        <br>
+                        <span>C<sub>of</sub>: {{answer.Cof | number}}</span>
+                        <br>
+                        <span>q<sub>f</sub>: {{answer.q | number : 6}} г/т</span>
+                        <br>
+                        <span>λ: {{answer.lyambda | number}}</span>
+                        <br>
+                        <span>d<sub>ср</sub>: {{answer.dsr | number}}</span>
+                        <br>
+                        <span>B<sub>H</sub>: {{answer.Bn | number}}</span>
+                        <br>
+                        <span>Б: {{answer.BB | number}}</span>
+                        <br>
+                        <span>Q: {{answer.Q | number}} кг</span>
+                        <br>
+                        <span>L<sub>Σ</sub>: {{answer.Lsigma | number}} м</span>
+                        <br>
+                        <span>Z<sub>в</sub>: {{answer.Zv | number}}</span>
+                        <br>
+                        <span>L<sub>в</sub>: {{answer.Lv | number}} м</span>
+
+                    </blockquote>
+                </div>
+
+            </div>
         </div>
 
     </div>

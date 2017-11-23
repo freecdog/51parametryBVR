@@ -19,8 +19,6 @@
     var BVRModel = function(){
 
         // VARS
-
-
         // default values
         var parameters = {
             A: 30,                  // размеры (длина), м
@@ -65,7 +63,11 @@
 
         // PRIVATE
 
-        function runCalculation(){
+        function noop(){}
+
+        function runCalculation(callback){
+            callback = callback || noop;
+
             parameters.roo = calcroo(parameters.roVV, parameters.roA);                  // относительная плотность заряжения глубоких скважин
             parameters.KA = calcKA(parameters.PVV, parameters.PA);                      // относительная работоспособность взрывчатого вещества
             parameters.dpr = calcdpr(parameters.dz, parameters.KA, parameters.roo);     // приведенный диаметр заряда
@@ -107,7 +109,7 @@
             parameters.betta = calcbetta(parameters.dk);                // коэффициент зависящий от dk
             parameters.alpha = calcalpha(parameters.dk);                // коэффициент зависящий от dk
 
-            parameters.BN = calcBN(parameters.dk, parameters.dsr, parameters.alpha, parameters.betta);
+            parameters.Bn = calcBn(parameters.dk, parameters.dsr, parameters.alpha, parameters.betta);
 
             parameters.Bk = parameters.Asch;
             parameters.BB = calcBB(parameters.sposobOtboiki, parameters.A, parameters.B, parameters.h, parameters.Bk, parameters.gamma);
@@ -121,7 +123,8 @@
 
             parameters.Lv = calcLv(parameters.Lsigma, parameters.Zv);
 
-            console.log(parameters);
+            console.log("calculated successfully:", parameters);
+            callback(parameters);
         }
 
         function calcKA(PVV, PA){
@@ -208,7 +211,7 @@
             return Math.PI * dz * dz / 4 * roVV;
         }
 
-        function calcBN(dk, dsr, alpha, betta){
+        function calcBn(dk, dsr, alpha, betta){
             var a = Math.pow(dsr / dk - 0.2 + (dsr/dk -0.2), betta);
             var b = Math.exp( (-alpha) * a);
             return 100 * ( 1 - b );
@@ -294,13 +297,13 @@
             var userParameters = {
                 A: 30,          // размеры (длина), м
                 alphaz: 0.1,    // диаметр глубоких скважин, м
-                Asch: 5,        // == Bk м
+                Asch: 5,        // == Bk, м, ширина вертикальной отрезной щели
                 B: 34,          // размеры (ширина), м
                 dk: 0.4,        // alphak, диаметр кондиционного куска
                 dz: 0.1,        // диаметр заряда, м
                 E: 1,           // количество параллельно-сближенных скважин
                 f: 8,           // коэффициент крепости обрушаемых горных пород
-                gamma: 3.5,     // объемный вес руды в массиве, тонн/м3
+                gamma: 3500,    // объемный вес руды в массиве, кг/м3
                 H: 700,         // глубина разработки, м
                 h: 34,          // размеры (высота), м
                 //hps:
@@ -332,13 +335,14 @@
             //);
 
             bvrModel.init();
-            bvrModel.applyUserParameters(userParameters);
+            //bvrModel.applyUserParameters(userParameters);
             //bvrModel.runCalculationControl();
-            bvrModel.runCalculation();
+            //bvrModel.runCalculation();
 
             console.log('init jCalcBVRMainController() successfully');
 
             $scope.parameters = userParameters;
+            $scope.answer = {};
         }
 
         function convertUserParameters(obj, arrFromTo){
@@ -359,11 +363,18 @@
 
         function Calculate(){
             bvrModel.applyUserParameters($scope.parameters);
-            bvrModel.runCalculation();
+            bvrModel.runCalculation(function(answer){
+                angular.copy(answer, $scope.answer);
+                //$scope.answer = answer;
+            });
         }
 
+        //$scope.$watch('parameters', function(newValue){
+        //    console.log("parameters changed,", newValue);
+        //}, true);
+
         // public
-        this.Calculate = Calculate;
+        $scope.Calculate = Calculate;
 
 
     }]);
